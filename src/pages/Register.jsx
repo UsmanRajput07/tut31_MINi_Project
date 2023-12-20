@@ -1,10 +1,13 @@
+import Swal from "sweetalert2";
+import { URL } from "../helper/url";
+
 export default function Register() {
   const submit = () => {
     let u = document.getElementById("User_Name").value;
     let email = document.getElementById("user_email").value;
     let p = document.getElementById("password").value;
 
-    fetch(`http://localhost:1337/api/auth/local/register`, {
+    fetch(`${URL}/api/auth/local/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,7 +19,19 @@ export default function Register() {
       }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        data.data === null 
+          ? Swal.fire({
+              title: "Error",
+              text: "user has been Already exsites",
+              icon: "error",
+            })
+          : Swal.fire({
+              title: "Good job!",
+              text: "USER created!",
+              icon: "success",
+            });
+      })
       .catch((err) => console.log(err));
   };
   return (
